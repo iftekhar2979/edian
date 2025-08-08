@@ -27,7 +27,7 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
         {/* Logo and Intro */}
         <div>
-          <h2 className="text-2xl font-serif font-bold mb-4">Edian</h2>
+          <h2 className="text-2xl font-serif font-bold mb-4">Shen-Jidan</h2>
           <p className="text-sm text-gray-600">
             Discover modern tech and natural beauty in perfect harmony.
           </p>
@@ -89,7 +89,7 @@ const Footer: React.FC = () => {
           <ul className="space-y-2 text-sm">
             <li className="flex items-center space-x-2">
               <EnvelopeIcon className="w-4 h-4" />
-              <span>support@edian.com</span>
+              <span>support@shenjidan.com</span>
             </li>
             <li className="flex items-center space-x-2">
               <PhoneIcon className="w-4 h-4" />
@@ -101,7 +101,7 @@ const Footer: React.FC = () => {
 
       {/* Bottom Bar */}
       <div className="bg-gray-200 text-center py-4 text-xs text-gray-500">
-        © {new Date().getFullYear()} Edian. All rights reserved.
+        © {new Date().getFullYear()} Shen-Jidan. All rights reserved.
       </div>
     </footer>
   )
