@@ -5,8 +5,7 @@ import React from 'react'
 
 function page() {
   return (
-    <div className='bg-white min-h-screen pt-16'>
-
+    <div className=' min-h-screen pt-16'>
         <ProductsText/>
         <FilterSortBar/>
         <ProductGrid/>

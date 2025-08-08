@@ -1,8 +1,6 @@
 // app/api/perfumes/route.ts
 import { NextResponse } from 'next/server';
-
-export async function GET() {
-  const perfumes = [
+const perfumes = [
     {
       id: "1",
       name: "Hot Selling 2-Channel 4K Front and 1080P Rear Dash Cam with 1.5 Inch IPS Screen GPS WiFi App Control Loop Recording G-Sensor",
@@ -57,6 +55,31 @@ export async function GET() {
       isOnSale: true,
     },
   ];
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  console.log(searchParams)
+  const id = searchParams.get("id");
+console.log("Fetching product with ID:", id);
+  if (id) {
+    const product = perfumes.find((item) => item.id === id);
+    if (!product) {
+      return NextResponse.json(
+        { message: "Product not found" },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json(product);
+  }
 
+  // No ID provided, return all products
   return NextResponse.json(perfumes);
+}
+
+export async function POST(req: Request) {
+  const data = await req.json();
+
+  // You'd normally store this in DB
+  console.log("New product submitted:", data);
+
+  return NextResponse.json({ message: "Product uploaded" }, { status: 200 });
 }

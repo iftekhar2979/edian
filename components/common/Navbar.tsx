@@ -52,7 +52,9 @@ const Navbar: React.FC = () => {
           {/* Desktop Icons */}
           <div className="hidden md:flex items-center space-x-6">
             <MagnifyingGlassIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
-            <UserIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
+            <Link href={'/login'}>
+<UserIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
+            </Link>
             <ShoppingBagIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
           </div>
 
@@ -109,7 +111,9 @@ const Navbar: React.FC = () => {
           {/* Mobile Icons */}
           <div className="flex items-center space-x-6">
             <MagnifyingGlassIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
+            <Link href={'/login'}>
             <UserIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
+            </Link>
             <ShoppingBagIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
           </div>
         </div>
