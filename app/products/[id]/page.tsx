@@ -1,6 +1,7 @@
 // /app/products/[id]/page.tsx
 
 import ProductDetails from '@/components/Product/ProductDetails'
+import { JSX } from 'react';
 
 interface Product {
   id: string;
@@ -24,8 +25,8 @@ async function getProductById(id: string): Promise<Product | null> {
   return data;
 }
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const product = await getProductById(params.id);
+export default async function Page({ params }: any):Promise<JSX.Element> {
+  const product = await getProductById(params?.id);
 
   if (!product) {
     return <div className="text-center p-10">Product not found</div>;

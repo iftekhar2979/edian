@@ -40,7 +40,8 @@ export default function ProductForm() {
       if (!res.ok) throw new Error("Failed to upload");
 
       setSuccess(true);
-    } catch (err) {
+    } catch (err:any ) {
+        console.log(err)
       alert("Error uploading product.");
     } finally {
       setSubmitting(false);
