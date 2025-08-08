@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Button } from '../Resuable/Button'
+import { Button } from '../Resuable/Button/Button'
 
 const ContactForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -22,10 +22,10 @@ const ContactForm: React.FC = () => {
 
   return (
     <div className="bg-white p-6 w-full max-w-2xl mx-auto">
-      <h2 className="text-2xl font-semibold mb-4  text-gray-800 tracking-widest">Contact Us</h2>
+      <h2 className="text-2xl font-semibold mb-4  text-black tracking-widest">Contact Us</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium mb-1" htmlFor="name">
+          <label className="block text-sm text-black font-medium mb-1" htmlFor="name">
             Name
           </label>
           <input
@@ -38,7 +38,7 @@ const ContactForm: React.FC = () => {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1" htmlFor="email">
+          <label className="block text-sm  text-black font-medium mb-1" htmlFor="email">
             Email
           </label>
           <input
@@ -51,7 +51,7 @@ const ContactForm: React.FC = () => {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1" htmlFor="message">
+          <label className="block text-sm text-black font-medium mb-1" htmlFor="message">
             Message
           </label>
           <textarea

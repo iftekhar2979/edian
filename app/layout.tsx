@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${jetbrainsMono.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${jetbrainsMono.variable} ${jetbrainsMono.variable} antialiased bg-white`}
       >
         <Navbar/>
        

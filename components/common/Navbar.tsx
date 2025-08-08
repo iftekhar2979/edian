@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from 'react';
 import {
   MagnifyingGlassIcon,
@@ -7,26 +7,46 @@ import {
   Bars3Icon,
   XMarkIcon
 } from '@heroicons/react/24/outline';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname(); // 👈 get current path
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const isActive = (path: string) => pathname === path;
 
   return (
     <nav className="bg-gray-100 border-b border-gray-200 fixed top-0 w-full z-50">
       <div className="max-w-7xl mx-auto px-6 sm:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="text-2xl font-serif text-gray-800 tracking-widest">Edian</div>
+          <div className="text-2xl font-serif text-gray-800 tracking-widest">Shen-Jidan</div>
 
           {/* Desktop Nav Links */}
           <div className="hidden md:flex space-x-8 text-sm font-medium text-gray-700">
-            <a href="#" className="hover:underline">Home</a>
-            <a href="#" className="underline underline-offset-4">Products</a>
-            <a href="#" className="hover:underline">Contact</a>
+            <Link
+              href="/"
+              className={isActive('/') ? 'underline underline-offset-4' : 'hover:underline'}
+            >
+              Home
+            </Link>
+            <Link
+              href="/products"
+              className={isActive('/products') ? 'underline underline-offset-4' : 'hover:underline'}
+            >
+              Products
+            </Link>
+            <Link
+              href="/contact"
+              className={isActive('/contact') ? 'underline underline-offset-4' : 'hover:underline'}
+            >
+              Contact
+            </Link>
           </div>
 
           {/* Desktop Icons */}
@@ -54,6 +74,7 @@ const Navbar: React.FC = () => {
         {/* Sliding Drawer */}
         <div 
           className={`fixed left-0 top-0 w-64 h-full bg-white p-6 space-y-6 transform transition-transform duration-300 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
+          onClick={(e) => e.stopPropagation()} // Prevents closing when clicking inside the drawer
         >
           {/* Close Icon */}
           <div className="flex justify-end">
@@ -65,9 +86,24 @@ const Navbar: React.FC = () => {
 
           {/* Mobile Nav Links */}
           <div className="flex flex-col space-y-4 text-sm font-medium text-gray-700">
-            <a href="#" className="hover:underline">Home</a>
-            <a href="#" className="underline underline-offset-4">Products</a>
-            <a href="#" className="hover:underline">Contact</a>
+            <Link
+              href="/"
+              className={isActive('/') ? 'underline underline-offset-4' : 'hover:underline'}
+            >
+              Home
+            </Link>
+            <Link
+              href="/products"
+              className={isActive('/products') ? 'underline underline-offset-4' : 'hover:underline'}
+            >
+              Products
+            </Link>
+            <Link
+              href="/contact"
+              className={isActive('/contact') ? 'underline underline-offset-4' : 'hover:underline'}
+            >
+              Contact
+            </Link>
           </div>
 
           {/* Mobile Icons */}

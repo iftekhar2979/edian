@@ -64,6 +64,8 @@ const ImageSlider: React.FC = () => {
               <Image
                 src={slide.image}
                 alt={`slide-${index}`}
+                height={100}
+                width={100}
                 className="object-cover w-full h-full brightness-75"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10" />
