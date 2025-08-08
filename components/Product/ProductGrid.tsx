@@ -4,7 +4,6 @@
 import React, { useEffect, useState } from "react";
 import ProductCard  from "./ProductCard";
 import { Product } from "@/types/product";
-import FilterSortBar from "../filter/FilterBar";
 import Link from "next/link";
 
 const ProductGrid = () => {

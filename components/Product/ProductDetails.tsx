@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
 
 interface ProductCardProps {
   imageUrl: string;
@@ -35,10 +36,13 @@ const ProductDetails: React.FC<ProductCardProps> = ({
     <div className="max-w-5xl mt-16 mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 p-6">
       {/* Image */}
       <div className="flex justify-center items-center">
-        <img
+      
+        <Image
           src={imageUrl}
           alt={title}
           className="w-full max-w-md rounded-lg shadow-lg"
+          height={400}
+          width={400}
         />
       </div>
 
