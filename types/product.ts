@@ -7,3 +7,5 @@ export type Product = {
   oldPrice?: number;
   isOnSale?: boolean;
 };
+// types/product.ts
+

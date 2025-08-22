@@ -1,25 +1,27 @@
 // components/productCard.tsx
+import { IProduct } from "@/lib/models/products.model";
 import { Product } from "@/types/product";
 import Image from "next/image";
 import React from "react";
 
 interface Props {
-  product: Product;
+  product: IProduct;
 }
 
 const ProductCard: React.FC<Props> = ({ product }) => {
+  console.log(product)
   return (
     <div className="relative bg-white overflow-hidden group cursor-pointer border border-gray-200 h-full flex flex-col justify-between">
       {/* Sale Tag */}
-      {product.isOnSale && (
+      {/* {product.isOnSale && (
         <div className="absolute top-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded z-10 animate-pulse">
           Sale
         </div>
-      )}
+      )} */}
 
       {/* Product Image */}
       <Image
-        src={product.imageUrl}
+        src={product.images[0] || '/placeholder.png'}
         height={100}
         width={100}
         alt={product.name}
@@ -30,14 +32,10 @@ const ProductCard: React.FC<Props> = ({ product }) => {
       <div className="p-4 flex flex-col flex-1 justify-between">
         <div>
           <h2 className="text-md text-black font-semibold mb-1">{product.name}</h2>
-          <p className="text-sm text-gray-500 mb-2">{product.description}</p>
+          <div className="text-sm text-gray-500 mb-2" dangerouslySetInnerHTML={{ __html: product.description }}></div>
 
-          <div className="flex items-center space-x-2 mb-3">
-            {product.oldPrice && (
-              <span className="text-sm line-through text-gray-400">
-                Tk {product.oldPrice}
-              </span>
-            )}
+
+          
             <span className="text-lg font-bold text-pink-600">
               Tk {product.price}
             </span>
@@ -54,7 +52,7 @@ const ProductCard: React.FC<Props> = ({ product }) => {
           </button>
         </div>
       </div>
-    </div>
+    
   );
 };
 

@@ -1,85 +1,82 @@
-// app/api/perfumes/route.ts
-import { NextResponse } from 'next/server';
-const perfumes = [
-    {
-      id: "1",
-      name: "Hot Selling 2-Channel 4K Front and 1080P Rear Dash Cam with 1.5 Inch IPS Screen GPS WiFi App Control Loop Recording G-Sensor",
-      description: "",
-      imageUrl: "https://s.alicdn.com/@sc04/kf/S995e393bdfee49bf9fa02a1cbb7846a0Y/Hot-Selling-2-Channel-4K-Front-and.jpg?hasNWGrade=1",
-      price: 850,
-    },
-    {
-      id: "2",
-      name: "Stylish Design Car Dash Cam Doble Camara 2K Car Gadgets Night Vision GPS Dashboard Camera with WiFi APP Control",
-      description: "",
-      imageUrl: "https://s.alicdn.com/@sc04/kf/H80f68829b6ea4be2b26fb1747b3519096/Stylish-Design-Car-Dash-Cam-Doble-Camara.jpg?hasNWGrade=1",
-      price: 19.00,
-    },
-    {
-      id: "3",
-      name: "G3 Factory Hot Sale No Screen G3 GPS1080p Dash Cam Card Black Box 4G",
-      description: "",
-      imageUrl: "https://s.alicdn.com/@sc04/kf/Ad3c664d3094a4425a7a841057d83dc1b9/G3-Factory-Hot-Sale-No-Screen-G3.jpg?hasNWGrade=1",
-      price: 56,
-    },
-    {
-      id: "4",
-      name: "No Screen 4g Sim Cloud Dash Cam Dual Camera Car Dvr with App Live Front and Rear Dual Lens Dashcam with Gps Wifi Dash Cam 1080P",
-      description: "",
-      imageUrl: "https://s.alicdn.com/@sc04/kf/H5cb43c2eabcb457383e58894bbe68624d/No-Screen-4g-Sim-Cloud-Dash-Cam.jpg?hasNWGrade=1",
-      price: 10,
-      oldPrice: 14,
-      isOnSale: true,
-    },
-     {
-      id: "5",
-      name: "Stylish Design Car Dash Cam Doble Camara 2K Car Gadgets Night Vision GPS Dashboard Camera with WiFi APP Control",
-      description: "",
-      imageUrl: "https://s.alicdn.com/@sc04/kf/H80f68829b6ea4be2b26fb1747b3519096/Stylish-Design-Car-Dash-Cam-Doble-Camara.jpg?hasNWGrade=1",
-      price: 19.00,
-    },
-    {
-      id: "6",
-      name: "G3 Factory Hot Sale No Screen G3 GPS1080p Dash Cam Card Black Box 4G",
-      description: "",
-      imageUrl: "https://s.alicdn.com/@sc04/kf/Ad3c664d3094a4425a7a841057d83dc1b9/G3-Factory-Hot-Sale-No-Screen-G3.jpg?hasNWGrade=1",
-      price: 56,
-    },
-    {
-      id: "7",
-      name: "No Screen 4g Sim Cloud Dash Cam Dual Camera Car Dvr with App Live Front and Rear Dual Lens Dashcam with Gps Wifi Dash Cam 1080P",
-      description: "",
-      imageUrl: "https://s.alicdn.com/@sc04/kf/H5cb43c2eabcb457383e58894bbe68624d/No-Screen-4g-Sim-Cloud-Dash-Cam.jpg?hasNWGrade=1",
-      price: 10,
-      oldPrice: 14,
-      isOnSale: true,
-    },
-  ];
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  console.log(searchParams)
-  const id = searchParams.get("id");
-console.log("Fetching product with ID:", id);
-  if (id) {
-    const product = perfumes.find((item) => item.id === id);
-    if (!product) {
-      return NextResponse.json(
-        { message: "Product not found" },
-        { status: 404 }
-      );
-    }
-    return NextResponse.json(product);
-  }
+import productsModel from '@/lib/models/products.model';
+import { NextRequest, NextResponse } from 'next/server';
+import cloudinary from 'cloudinary';
+import dbConnect from '@/lib/mongoose';
 
-  // No ID provided, return all products
-  return NextResponse.json(perfumes);
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+// Handler to get all products
+export async function GET(req: NextRequest) {
+  try {
+    // Fetch all products from the database
+    const products = await productsModel.find();
+
+    return NextResponse.json(products);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
+  }
 }
 
-export async function POST(req: Request) {
-  const data = await req.json();
+export async function POST(req: NextRequest) {
+  try {
+    dbConnect()
+    const formData = await req.formData();
+    const name = formData.get('name') as string;
+    const price = parseFloat(formData.get('price') as string);
+    const description = formData.get('description') as string; // This will contain rich text
+    const images: string[] = [];
 
-  // You'd normally store this in DB
-  console.log("New product submitted:", data);
+    // Handle image file uploads (store URLs or upload to cloud storage)
+    const imageFiles = formData.getAll('images') as File[];
+    
+    // Upload each image to Cloudinary
+    for (const file of imageFiles) {
+      const imageUrl = await uploadImageToCloud(file); // Upload image to Cloudinary
+      images.push(imageUrl); // Push the image URL to the array
+    }
+console.log(images)
+    // Validate required fields
+    if (!name || !price || !description || images.length === 0) {
+      return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
+    }
 
-  return NextResponse.json({ message: "Product uploaded" }, { status: 200 });
+    // Create the new product in the database
+    const newProduct = new productsModel({
+      name,
+      price,
+      description,
+      images,
+    });
+console.log(newProduct)
+    // Save the product to the database
+    await newProduct.save();
+
+    // Return the newly created product as a response
+    return NextResponse.json(newProduct, { status: 201 });
+  } catch (error) {
+    console.error('Error creating product:', error);
+    return NextResponse.json({ error: 'Failed to create product' }, { status: 500 });
+  }
+}
+
+// Function to upload image to Cloudinary and get the image URL
+async function uploadImageToCloud(file: File) {
+  return new Promise<string>(async(resolve, reject) => {
+    const fileBuffer = Buffer.from(await file.arrayBuffer());
+    
+    cloudinary.v2.uploader.upload_stream(
+      { resource_type: 'auto', folder: 'products' }, // Upload images to a 'products' folder
+      (error, result) => {
+        if (error) {
+          reject(error); // Handle any errors during upload
+        } else {
+          resolve(result?.secure_url || ''); // Return the URL of the uploaded image
+        }
+      }
+    ).end(fileBuffer);
+  });
 }

@@ -15,7 +15,7 @@ interface Product {
 
 // This is a Server Component (SSR)
 async function getProductById(id: string): Promise<Product | null> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products?id=${id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products/${id}`, {
     cache: 'no-store', // important to ensure SSR fetches fresh data
   });
 
@@ -34,11 +34,7 @@ export default async function Page({ params }: any):Promise<JSX.Element> {
 
   return (
     <div>
-      <ProductDetails
-        imageUrl={product.imageUrl}
-        title={product.name}
-        price={product.price}
-        quantityAvailable={10}
+      <ProductDetails product={product}
       />
     </div>
   );

@@ -1,105 +1,186 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import dynamic from "next/dynamic";
 
-const productSchema = z.object({
-  title: z.string().min(2, "Title is required"),
-  price: z.number().min(1, "Price must be greater than 0"),
-  description: z.string().min(5, "Description is too short"),
-  image: z.string().url("Image must be a valid URL"),
-});
+// Dynamically import Quill (without SSR, as it uses the DOM)
+// const Quill = dynamic(() => import("quill"), { ssr: false });
+import Quill from "quill";
 
-type ProductFormData = z.infer<typeof productSchema>;
+import "quill/dist/quill.snow.css"; // Import Quill styles
 
-export default function ProductForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ProductFormData>({
-    resolver: zodResolver(productSchema),
+export default function ProductUploadForm() {
+  const [productData, setProductData] = useState({
+    name: "",
+    price: 0,
+    description: "",
+    images: [] as File[], // This will hold the files selected for image uploads
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const [success, setSuccess] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const editorRef = useRef(null); // Reference to the editor container
 
-  const onSubmit = async (data: ProductFormData) => {
-    setSubmitting(true);
-    setSuccess(false);
+  // Initialize Quill editor on component mount
+  useEffect(() => {
+    if (editorRef.current) {
+      const quill = new Quill(editorRef.current, {
+        
+        theme: "snow",
+        placeholder: "Type your product description...",
+        modules: {
+          toolbar: [
+            [{ header: "1" }, { header: "2" }, { font: [] }],
+            [{ list: "ordered" }, { list: "bullet" }],
+            ["bold", "italic", "underline"],
+            ["link", "image"],
+            [{ align: [] }],
+            ["clean"],
+          ],
+        },
+      });
+
+      // Sync Quill content with the state
+      quill.on("text-change", function () {
+        setProductData((prevData) => ({
+          ...prevData,
+          description: quill.root.innerHTML, // Save rich HTML content to state
+        }));
+      });
+    }
+  }, []);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      setProductData({
+        ...productData,
+        images: Array.from(files),
+      });
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    const formData = new FormData();
+
+    formData.append("name", productData.name);
+    formData.append("price", productData.price.toString());
+    formData.append("description", productData.description);
+
+    productData.images.forEach((image) => {
+      formData.append("images", image);
+    });
 
     try {
       const res = await fetch("/api/products", {
         method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" },
+        body: formData,
       });
 
-      if (!res.ok) throw new Error("Failed to upload");
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Product creation failed");
+      }
 
-      setSuccess(true);
-    } catch (err:any ) {
-        console.log(err)
-      alert("Error uploading product.");
+      const createdProduct = await res.json();
+      alert("Product created successfully!");
+    } catch (error:any) {
+      setError(error.message);
     } finally {
-      setSubmitting(false);
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded shadow-md space-y-6 max-w-xl mx-auto mt-16">
-      <h2 className="text-2xl font-bold text-black">Upload Product</h2>
+    <div className=" mt-10 bg-white p-8 rounded-lg shadow-md text-black">
+      <h1 className="text-3xl font-bold text-center mb-6">Upload New Product</h1>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Product Name */}
+        <div>
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            Product Name
+          </label>
+          <input
+            type="text"
+            id="name"
+            className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={productData.name}
+            onChange={(e) => setProductData({ ...productData, name: e.target.value })}
+            required
+          />
+        </div>
 
-      <div>
-        <label className="block text-black mb-1">Title</label>
-        <input
-          {...register("title")}
-          className="w-full h-12 px-4 border border-black rounded focus:ring-2 focus:ring-blue-500"
-        />
-        {errors.title && <p className="text-red-500 text-sm">{errors.title.message}</p>}
-      </div>
+        {/* Price */}
+        <div>
+          <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+            Price ($)
+          </label>
+          <input
+            type="number"
+            id="price"
+            className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={productData.price}
+            onChange={(e) =>
+              setProductData({ ...productData, price: parseFloat(e.target.value) })
+            }
+            required
+            min={0}
+          />
+        </div>
 
-      <div>
-        <label className="block text-black mb-1">Price (TK)</label>
-        <input
-          type="number"
-          step="0.01"
-          {...register("price", { valueAsNumber: true })}
-          className="w-full h-12 px-4 border border-black rounded focus:ring-2 focus:ring-blue-500"
-        />
-        {errors.price && <p className="text-red-500 text-sm">{errors.price.message}</p>}
-      </div>
+        {/* Description (Quill Editor) */}
+        <div>
+          <label htmlFor="description" className="block text-sm font-medium ">
+            Product Description
+          </label>
+        <div
+        ref={editorRef}
+        className="quill-editor-container"
+        style={{
+          height: "500px", // Make the height larger
+          width: "100%",   // Ensure it spans the full width
+          border: "1px solid #ccc", // Border for the editor container
+        }}
+      ></div>
+        </div>
 
-      <div>
-        <label className="block text-black mb-1">Image URL</label>
-        <input
-          {...register("image")}
-          className="w-full h-12 px-4 border border-black rounded focus:ring-2 focus:ring-blue-500"
-        />
-        {errors.image && <p className="text-red-500 text-sm">{errors.image.message}</p>}
-      </div>
+        {/* Image Upload */}
+        <div>
+          <label htmlFor="images" className="block text-sm font-medium text-gray-700">
+            Product Images (Select Multiple)
+          </label>
+          <input
+            type="file"
+            id="images"
+            className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            accept="image/*"
+            onChange={handleImageChange}
+            multiple
+            required
+          />
+          <p className="text-xs text-gray-500 mt-1">
+            You can select multiple images (JPG, PNG, etc.).
+          </p>
+        </div>
 
-      <div>
-        <label className="block text-black mb-1">Description</label>
-        <textarea
-          {...register("description")}
-          rows={4}
-          className="w-full px-4 py-2 border border-black rounded focus:ring-2 focus:ring-blue-500"
-        />
-        {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
-      </div>
+        {/* Error Message */}
+        {error && <p className="text-red-500 text-center text-sm">{error}</p>}
 
-      <button
-        type="submit"
-        disabled={submitting}
-        className="w-full bg-black text-white py-3 rounded hover:bg-gray-800 transition"
-      >
-        {submitting ? "Uploading..." : "Upload Product"}
-      </button>
-
-      {success && <p className="text-green-600 text-sm mt-2">Product uploaded successfully!</p>}
-    </form>
+        {/* Submit Button */}
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition duration-200 disabled:opacity-50"
+            disabled={loading}
+          >
+            {loading ? "Uploading..." : "Upload Product"}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }

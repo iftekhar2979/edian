@@ -5,6 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { HiEye, HiEyeOff } from "react-icons/hi";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -24,6 +25,7 @@ export default function LoginForm() {
 
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false); // State to toggle password visibility
   const router = useRouter();
 
   const onSubmit = async (data: LoginFormData) => {
@@ -39,11 +41,13 @@ export default function LoginForm() {
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.message || "Login failed");
+        // console.log("Error",errorData)
+        throw new Error(errorData.error || "Login failed");
       }
 
       router.push("/dashboard");
     } catch (error: any) {
+      console.log(error)
       setApiError(error.message);
     } finally {
       setLoading(false);
@@ -72,16 +76,23 @@ export default function LoginForm() {
         </div>
 
         {/* Password */}
-        <div>
+        <div className="relative">
           <label htmlFor="password" className="block text-sm font-medium text-black">
             Password
           </label>
           <input
             {...register("password")}
-            type="password"
+            type={passwordVisible ? "text" : "password"} // Toggle password visibility
             id="password"
             className="mt-1 block w-full h-14 px-4 border border-black rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
           />
+          {/* Password visibility toggle icon */}
+          <div
+            className="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer"
+            onClick={() => setPasswordVisible((prev) => !prev)} // Toggle the state on click
+          >
+            {passwordVisible ? <HiEyeOff className="text-gray-600 h-fit pt-6" /> : <HiEye className="text-gray-600 h-fit pt-6" />}
+          </div>
           {errors.password && (
             <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
           )}
