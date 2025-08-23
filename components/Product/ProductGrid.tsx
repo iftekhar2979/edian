@@ -1,44 +1,36 @@
-// components/ProductGrid.tsx
-"use client";
-
-import React, { useEffect, useState } from "react";
-import ProductCard  from "./ProductCard";
-import { Product } from "@/types/product";
+import { IProduct } from "@/lib/models/products.model"; // Import the Product type
+import ProductCard from "./ProductCard"; // Import ProductCard component
 import Link from "next/link";
-import { IProduct } from "@/lib/models/products.model";
 
-const ProductGrid = () => {
-  const [products, setProducts] = useState<IProduct[]>([]);
+// Server Component
+const ProductGrid = async () => {
+  // Fetch products data on the server
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products`, {
+    cache: "no-store", // Ensure fresh data is fetched on each request
+  });
+  
+  const products: IProduct[] = await res.json(); // Parse the response
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const res = await fetch("/api/products");
-      const data = await res.json();
-      setProducts(data);
-    };
-
-    fetchProducts();
-  }, []);
+  // If no products are found, return a message
+  if (products.length === 0) {
+    return (
+      <div className="text-center p-10">
+        <h1 className="text-2xl font-semibold">No products available</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-50 px-4 pt-6 sm:px-6 lg:px-16">
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 relative max-w-7xl mx-auto px-6 sm:px-8 my-6" >
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 relative max-w-7xl mx-auto px-6 sm:px-8 my-6">
         {products.map((product) => (
-          <div
-            // key={product._id}
-            className={`transform `}
-          >
-             <Link href={`/products/${product._id}`}>
-            <ProductCard product={product} />
+          <div key={product._id} className="transform">
+            <Link href={`/products/${product._id}`}>
+              <ProductCard product={product} />
             </Link>
           </div>
         ))}
       </div>
-      <div className="flex justify-center">
-
-      </div>
-   
     </div>
   );
 };

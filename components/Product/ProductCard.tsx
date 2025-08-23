@@ -24,6 +24,7 @@ const ProductCard: React.FC<Props> = ({ product }) => {
         src={product.images[0] || '/placeholder.png'}
         height={100}
         width={100}
+        quality={100}
         alt={product.name}
         className="w-full transform transition-all duration-300 h-64 object-cover hover:scale-110 hover:border-pink-400"
       />

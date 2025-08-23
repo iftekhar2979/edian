@@ -67,8 +67,10 @@ const ProductDetails: React.FC<{ product }> = ({ product }) => {
       </div>
 
       {/* Info Section */}
+
       <div className="flex flex-col justify-center space-y-6">
         <h1 className="text-3xl font-semibold text-black">{name}</h1>
+        <div className="text-black" dangerouslySetInnerHTML={{__html:description}}></div>
         <p className="text-xl text-gray-700">Tk {price.toLocaleString()}</p>
 
         {/* Quantity Selector */}
@@ -91,7 +93,7 @@ const ProductDetails: React.FC<{ product }> = ({ product }) => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 my-6">
           <button className="flex-1 border text-black border-gray-800 py-2 px-4 rounded hover:bg-gray-100 transition">
             Add to cart
           </button>

@@ -11,9 +11,14 @@ cloudinary.config({
 // Handler to get all products
 export async function GET(req: NextRequest) {
   try {
+    dbConnect()
+    // console.log(req)
     // Fetch all products from the database
     const products = await productsModel.find();
-
+    if(!products || products.length === 0) {
+      return NextResponse.json({ message: 'No products found' }, { status: 404 });
+    }
+console.log(products)
     return NextResponse.json(products);
   } catch (error) {
     console.error('Error fetching products:', error);
@@ -38,7 +43,7 @@ export async function POST(req: NextRequest) {
       const imageUrl = await uploadImageToCloud(file); // Upload image to Cloudinary
       images.push(imageUrl); // Push the image URL to the array
     }
-console.log(images)
+// console.log(images)
     // Validate required fields
     if (!name || !price || !description || images.length === 0) {
       return NextResponse.json({ error: 'All fields are required' }, { status: 400 });

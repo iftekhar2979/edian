@@ -61,13 +61,13 @@ const ImageSlider: React.FC = () => {
         {slides.map((slide, index) => (
           <SwiperSlide key={index}>
             <div className="relative h-[60vh] w-full">
-              <Image
+              {/* <Image
                 src={slide.image}
                 alt={`slide-${index}`}
                 height={100}
                 width={100}
                 className="object-cover w-full h-full brightness-75"
-              />
+              /> */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10" />
               <div
                 className="absolute inset-0 flex flex-col justify-center items-center z-20 text-white text-center px-4"
