@@ -1,14 +1,9 @@
 import productsModel from '@/lib/models/products.model';
 import { NextRequest, NextResponse } from 'next/server';
-import cloudinary from 'cloudinary';
 import dbConnect from '@/lib/mongoose';
-import { uploadImageToCloud } from './[id]/route';
 
-// cloudinary.config({
-//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-//   api_key: process.env.CLOUDINARY_API_KEY,
-//   api_secret: process.env.CLOUDINARY_API_SECRET,
-// });
+import { uploadImageToCloud } from './uploadImageToCloudinary';
+
 // Handler to get all products
 // export async function GET(req: NextRequest) {
 //   try {
@@ -87,7 +82,6 @@ export async function POST(req: NextRequest) {
     const images: string[] = [];
 
     const imageFiles = formData.getAll("images") as File[];
-    console.log(quantity,hasStock)
     // Upload each image to Cloudinary
     for (const file of imageFiles) {
       const imageUrl = await uploadImageToCloud(file); // Upload image to Cloudinary
@@ -108,7 +102,6 @@ export async function POST(req: NextRequest) {
       description,
       images,
     });
-console.log(newProduct)
     // Save the product to the database
     await newProduct.save();
 

@@ -83,7 +83,7 @@ export default function ProductUploadForm() {
         throw new Error(errorData.error || "Product creation failed");
       }
 
-      const createdProduct = await res.json();
+      await res.json();
       alert("Product created successfully!");
     } catch (error: any) {
       setError(error.message);

@@ -1,10 +1,11 @@
 
 "use client"
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import Quill from "quill";
 import "quill/dist/quill.snow.css"; // Import Quill styles
+import Image from "next/image";
 
 export default function ProductUpdateForm({id}) {
   const [productData, setProductData] = useState({
@@ -18,7 +19,7 @@ export default function ProductUpdateForm({id}) {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+const router = useRouter()
   const editorRef = useRef(null); // Reference to the editor container
 // Product ID from URL
 
@@ -116,11 +117,10 @@ export default function ProductUpdateForm({id}) {
     });
 
     try {
-        console.log(formData)
       const res = await axios.put(`/api/products/${id}`, formData);
       if (res.status === 200) {
         alert("Product updated successfully!");
-        // router.push("/products"); // Redirect to the products page after success
+         router.push("/products"); // Redirect to the products page after success
       }
     } catch (error: any) {
       setError(error.message);
@@ -222,7 +222,7 @@ export default function ProductUpdateForm({id}) {
           <div className="flex space-x-2">
             {productData.existingImages.map((image, index) => (
               <div key={index} className="relative">
-                <img src={image} alt={`Product Image ${index}`} className="w-20 h-20 object-cover" />
+                <Image src={image} alt={`Product Image ${index}`} className="w-20 h-20 object-cover" />
                 <button
                   type="button"
                   onClick={() => handleImageRemove(index)}

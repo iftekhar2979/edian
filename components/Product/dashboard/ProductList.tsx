@@ -14,10 +14,7 @@ type Product = {
 
 const ProductTable = () => {
   const [productList, setProductList] = useState<Product[]>([]);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-
-  // Fetch products from the API
+  // Fetch products from the PI
   const fetchProducts = async () => {
     try {
       const res = await axios.get('/api/products');
@@ -31,11 +28,7 @@ const ProductTable = () => {
     fetchProducts(); // Fetch products when the component mounts
   }, []);
 
-  // Handle click for editing a product
-  const handleEditClick = (product: Product) => {
-    setSelectedProduct(product);
-    setShowModal(true); // Show modal for editing
-  };
+
 
   // Handle click for deleting a product
   const handleDeleteClick = async (id: string) => {
@@ -46,25 +39,6 @@ const ProductTable = () => {
         fetchProducts(); // Refetch the list after deletion
       } catch (error) {
         console.error('Failed to delete product:', error);
-      }
-    }
-  };
-
-  // Close the edit modal
-  const handleModalClose = () => {
-    setShowModal(false);
-    setSelectedProduct(null);
-  };
-
-  // Save the edited product
-  const handleSaveChanges = async () => {
-    if (selectedProduct) {
-      try {
-        await axios.put(`/api/products/${selectedProduct._id}`, selectedProduct);
-        fetchProducts();
-        handleModalClose();
-      } catch (error) {
-        console.error('Failed to update product:', error);
       }
     }
   };

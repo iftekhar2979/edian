@@ -1,31 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
-import { IProduct } from "@/lib/models/products.model";
-import ProductImageCarousel from "./carousel/ProductImageCarousel";
-
-
 
 const ProductDetails: React.FC<{ product }> = ({ product }) => {
   const { images, name, price, description ,quantity} = product;
-
-  // const [quantity, setQuantity] = useState(1);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0); // State to manage the selected image index
-
-  // const handleIncrement = () => {
-  //   if (quantity < quantityAvailable) {
-  //     setQuantity((prev) => prev + 1);
-  //   }
-  // };
-
-  // const handleDecrement = () => {
-  //   if (quantity > 1) {
-  //     setQuantity((prev) => prev - 1);
-  //   }
-  // };
-
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const handleImageClick = (index: number) => {
     setSelectedImageIndex(index); // Set the selected image when the user clicks on a thumbnail
   };

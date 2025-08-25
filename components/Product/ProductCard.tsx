@@ -1,6 +1,5 @@
 // components/productCard.tsx
 import { IProduct } from "@/lib/models/products.model";
-import { Product } from "@/types/product";
 import Image from "next/image";
 import React from "react";
 

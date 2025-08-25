@@ -2,12 +2,8 @@
 import FilterSortBar from '@/components/filter/FilterBar';
 import ProductGrid from '@/components/Product/ProductGrid';
 import ProductsText from '@/components/Resuable/Banner/ProductsText';
-import { useSearchParams } from 'next/navigation';
-
 
 const Page = () => {
-
-
   return (
     <div className='min-h-screen pt-16'>
       <ProductsText />

@@ -3,7 +3,7 @@ import usersModel from '@/lib/models/users.model';
 import dbConnect from '@/lib/mongoose';
 import bcrypt from 'bcryptjs';
 
-export async function GET(req: Request) {
+export async function GET() {
   // console.log("Request received to seed admin user",req);
   try {
     await dbConnect(); // Connect to the database

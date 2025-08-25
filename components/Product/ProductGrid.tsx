@@ -1,4 +1,4 @@
-import { IProduct } from "@/lib/models/products.model"; // Import the Product type
+
 import ProductCard from "./ProductCard"; // Import ProductCard component
 import Link from "next/link";
 import { notFound } from 'next/navigation';

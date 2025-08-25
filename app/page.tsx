@@ -9,7 +9,7 @@ export default function Home() {
    <section>
    <Banner/>
 <ProductsText/>
-   <ProductGrid/>
+   <ProductGrid search={""} page={"1"} limit={"10"}/>
    <ContactForm/>
    <CompanyInfo/>
    </section>

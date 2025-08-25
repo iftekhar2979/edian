@@ -40,7 +40,7 @@ export default function LoginForm() {
         body: JSON.stringify(data),
       });
 
-      console.log(res.body)
+    
       if (!res.ok) {
         const errorData = await res.json();
         // console.log("Error",errorData)
@@ -48,7 +48,7 @@ export default function LoginForm() {
       }
       // console.log(res.)
 // localStorage.setItem('token',res.b)
-      // router.push("/dashboard");
+      router.push("/dashboard");
     } catch (error: any) {
       console.log(error)
       setApiError(error.message);

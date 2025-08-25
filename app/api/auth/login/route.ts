@@ -4,6 +4,14 @@ import jwt from 'jsonwebtoken';
 import dbConnect from '@/lib/mongoose'; // Adjust path as needed
 import usersModel from '@/lib/models/users.model'; // Adjust path as needed
 
+
+  interface Payload {
+      email:string;
+      name:string,
+      role:string,
+      image:string
+    }
+
 export async function POST(req: NextRequest) {
   // Connect to the database
   await dbConnect();
@@ -20,29 +28,33 @@ export async function POST(req: NextRequest) {
 
     // Find user by email
     const user = await usersModel.findOne({ email });
-    console.log(user)
     if (!user) {
       return new NextResponse(JSON.stringify({ error: 'Invalid credentials' }), { status: 400 });
     }
 
-    // Validate password
-    console.log(password)
-    const isValid = bcrypt.compare(password, user.password);
-    console.log(isValid)
+    // Validate password (bcrypt.compare is async, so we need to await it)
+    const isValid = await bcrypt.compare(password, user.password); // Await bcrypt.compare
     if (!isValid) {
       return new NextResponse(JSON.stringify({ error: 'Invalid credentials' }), { status: 400 });
     }
 
     // Generate JWT token
-    const payload = {
+    const payload : Payload = {
       email: user.email,
       name: user.name,
       role: user.role,
       image: user.image, // Include any other fields you want in the payload
     };
-
-    const token = jwt.sign(payload, process.env.JWT_SECRET as string, {
-      expiresIn: process.env.JWT_EXPIRES_IN || '1d', // Default expiry to 1 day
+    const jwtSecret  = process.env.JWT_SECRET as string
+  const expires  = process.env.JWT_EXPIRES_IN as string
+  if(!jwtSecret && !expires){
+    throw new Error("token not provided")
+  }
+  if(typeof jwtSecret !=="string" && typeof expires !=='string'){
+    throw new Error("token not provided")
+  }
+    const token = jwt.sign(payload, 'my-secret-key', {
+      expiresIn: '1d' , // Default expiry to 1 day
     });
 
     // Set the token in a cookie (HttpOnly)
@@ -54,7 +66,7 @@ export async function POST(req: NextRequest) {
       status: 200,
       headers,
     });
-  } catch (err:any) {
+  } catch (err: any) {
     console.error(err);
     return new NextResponse(
       JSON.stringify({ error: 'An error occurred during login', details: err.message }),
