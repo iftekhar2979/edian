@@ -1,16 +1,21 @@
-import FilterSortBar from '@/components/filter/FilterBar'
-import ProductGrid from '@/components/Product/ProductGrid'
-import ProductsText from '@/components/Resuable/Banner/ProductsText'
-import React from 'react'
 
-function page() {
+import FilterSortBar from '@/components/filter/FilterBar';
+import ProductGrid from '@/components/Product/ProductGrid';
+import ProductsText from '@/components/Resuable/Banner/ProductsText';
+import { useSearchParams } from 'next/navigation';
+
+
+const Page = () => {
+
+
   return (
-    <div className=' min-h-screen pt-16'>
-        <ProductsText/>
-        <FilterSortBar/>
-        <ProductGrid/>
+    <div className='min-h-screen pt-16'>
+      <ProductsText />
+      <FilterSortBar />
+      {/* Pass search, page, and limit to ProductGrid */}
+      <ProductGrid search={''} page={'1'} limit={'10'} />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default Page;

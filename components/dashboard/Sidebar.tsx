@@ -10,7 +10,7 @@ export default function Sidebar() {
         <Link href="/dashboard" className="block hover:underline">
           Upload Product
         </Link>
-        <Link href="#" className="block hover:underline">
+        <Link href="/dashboard/products" className="block hover:underline">
           Manage Products
         </Link>
         <Link href="#" className="block hover:underline">

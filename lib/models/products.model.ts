@@ -5,6 +5,8 @@ export interface IProduct extends Document {
   name: string;
   price: number;
   description: string;
+  quantity:number;
+  hasStock:boolean;
   images: string[];  // Array of image URLs
 }
 
@@ -14,24 +16,35 @@ const ProductSchema = new Schema<IProduct>(
     name: {
       type: String,
       required: true,
-      trim: true, // Removes leading/trailing spaces
+      trim: true,
     },
     price: {
       type: Number,
       required: true,
-      min: 0, // Price should be a positive number
+      min: 0,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      min: 1,
+      default: 1, // Default quantity to 1 if not provided
+    },
+    hasStock: {
+      type: Boolean,
+      required: true,
+      default: true, // Default hasStock to true if not provided
     },
     description: {
       type: String,
       required: true,
     },
     images: {
-      type: [String], // Array of strings to store image URLs
-      required: true, // You can make it optional if desired
+      type: [String],
+      required: true,
     },
   },
   {
-    timestamps: true, // Automatically adds createdAt and updatedAt fields
+    timestamps: true,
   }
 );
 

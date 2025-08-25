@@ -33,18 +33,19 @@ const ProductCard: React.FC<Props> = ({ product }) => {
       <div className="p-4 flex flex-col flex-1 justify-between">
         <div>
           <h2 className="text-md text-black font-semibold mb-1">{product.name}</h2>
-          <div className="text-sm text-gray-500 mb-2" dangerouslySetInnerHTML={{ __html: product.description }}></div>
-
-
           
-            <span className="text-lg font-bold text-pink-600">
+            <span className="text-lg font-bold text-black">
               Tk {product.price}
             </span>
+            
           </div>
+          <span className="text-lg font-bold text-pink-600">
+              Quantity In Stock {product.quantity}
+            </span>
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-auto flex space-x-2">
+        <div className="mt-auto flex space-x-2 my-2 mx-2">
           <button className="relative flex-1 text-black text-sm py-2 rounded border border-pink-600 overflow-hidden z-10 transition-all duration-500 hover:text-black hover:shadow-pink-glow neon-btn">
   Add to Cart
 </button>

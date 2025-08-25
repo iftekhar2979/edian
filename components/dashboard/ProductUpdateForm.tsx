@@ -1,90 +1,127 @@
-"use client";
 
-import { useState, useRef, useEffect } from "react";
+"use client"
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/router";
+import axios from "axios";
 import Quill from "quill";
 import "quill/dist/quill.snow.css"; // Import Quill styles
 
-export default function ProductUploadForm() {
+export default function ProductUpdateForm({id}) {
   const [productData, setProductData] = useState({
     name: "",
     price: 0,
-    quantity: 1, // Add quantity
-    hasStock: true, // Add hasStock (checkbox)
+    quantity: 1,
+    hasStock: true,
     description: "",
     images: [] as File[],
+    existingImages: [] as string[], // To store the existing image URLs
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const editorRef = useRef(null); // Reference to the editor container
+// Product ID from URL
 
   useEffect(() => {
-    if (editorRef.current) {
-      const quill = new Quill(editorRef.current, {
-        theme: "snow",
-        placeholder: "Type your product description...",
-        modules: {
-          toolbar: [
-            [{ header: "1" }, { header: "2" }, { font: [] }],
-            [{ list: "ordered" }, { list: "bullet" }],
-            ["bold", "italic", "underline"],
-            ["link", "image"],
-            [{ align: [] }],
-            ["clean"],
-          ],
-        },
-      });
-
-      // Sync Quill content with the state
-      quill.on("text-change", function () {
-        setProductData((prevData) => ({
-          ...prevData,
-          description: quill.root.innerHTML, // Save rich HTML content to state
-        }));
-      });
+    if (id) {
+      fetchProductDetails(id as string); // Fetch product details on mount
     }
-  }, []);
+  }, [id]);
 
+  // Fetch product details by ID
+  const fetchProductDetails = async (productId: string) => {
+    try {
+      const res = await axios.get(`/api/products/${productId}`);
+      const product = res.data;
+      setProductData({
+        name: product.name,
+        price: product.price,
+        quantity: product.quantity,
+        hasStock: product.hasStock,
+        description: product.description,
+        images: [],
+        existingImages: product.images,
+      });
+
+      // Initialize Quill editor with the existing description
+      if (editorRef.current) {
+        const quill = new Quill(editorRef.current, {
+          theme: "snow",
+          placeholder: "Type your product description...",
+          modules: {
+            toolbar: [
+              [{ header: "1" }, { header: "2" }, { font: [] }],
+              [{ list: "ordered" }, { list: "bullet" }],
+              ["bold", "italic", "underline"],
+              ["link", "image"],
+              [{ align: [] }],
+              ["clean"],
+            ],
+          },
+        });
+        quill.root.innerHTML = product.description; // Set the existing description in the editor
+        quill.on("text-change", function () {
+          setProductData((prevData) => ({
+            ...prevData,
+            description: quill.root.innerHTML, // Save rich HTML content to state
+          }));
+        });
+      }
+    } catch (error) {
+      console.error("Failed to fetch product:", error);
+    }
+  };
+
+  // Handle image change (add new images)
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
       setProductData({
         ...productData,
-        images: Array.from(files),
+        images: Array.from(files), // Add new images to the array
       });
     }
   };
 
+  // Handle image removal
+  const handleImageRemove = (index: number) => {
+    setProductData({
+      ...productData,
+      existingImages: productData.existingImages.filter((_, i) => i !== index), // Remove selected image
+    });
+  };
+
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     const formData = new FormData();
-
+    formData.append("id",id)
     formData.append("name", productData.name);
     formData.append("price", productData.price.toString());
     formData.append("quantity", productData.quantity.toString());
     formData.append("hasStock", productData.hasStock.toString());
     formData.append("description", productData.description);
 
+    // Add existing images (URLs) to the form data
+    productData.existingImages.forEach((image) => {
+      formData.append("existingImages", image);
+    });
+
+    // Add new images to the form data
     productData.images.forEach((image) => {
       formData.append("images", image);
     });
 
     try {
-      const res = await fetch("/api/products", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || "Product creation failed");
+        console.log(formData)
+      const res = await axios.put(`/api/products/${id}`, formData);
+      if (res.status === 200) {
+        alert("Product updated successfully!");
+        // router.push("/products"); // Redirect to the products page after success
       }
-
-      const createdProduct = await res.json();
-      alert("Product created successfully!");
     } catch (error: any) {
       setError(error.message);
     } finally {
@@ -94,7 +131,7 @@ export default function ProductUploadForm() {
 
   return (
     <div className="mt-10 bg-white p-8 rounded-lg shadow-md text-black">
-      <h1 className="text-3xl font-bold text-center mb-6">Upload New Product</h1>
+      <h1 className="text-3xl font-bold text-center mb-6">Edit Product</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Product Name */}
         <div>
@@ -163,24 +200,45 @@ export default function ProductUploadForm() {
 
         {/* Description (Quill Editor) */}
         <div>
-          <label htmlFor="description" className="block text-sm font-medium ">
+          <label htmlFor="description" className="block text-sm font-medium">
             Product Description
           </label>
           <div
             ref={editorRef}
             className="quill-editor-container"
             style={{
-              height: "500px",
-              width: "100%",
-              border: "1px solid #ccc",
+              height: "500px", // Make the height larger
+              width: "100%",   // Ensure it spans the full width
+              border: "1px solid #ccc", // Border for the editor container
             }}
           ></div>
+        </div>
+
+        {/* Existing Product Images */}
+        <div>
+          <label htmlFor="existingImages" className="block text-sm font-medium text-gray-700">
+            Existing Product Images
+          </label>
+          <div className="flex space-x-2">
+            {productData.existingImages.map((image, index) => (
+              <div key={index} className="relative">
+                <img src={image} alt={`Product Image ${index}`} className="w-20 h-20 object-cover" />
+                <button
+                  type="button"
+                  onClick={() => handleImageRemove(index)}
+                  className="absolute top-0 right-0 bg-red-600 text-white p-1 rounded-full"
+                >
+                  X
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Image Upload */}
         <div>
           <label htmlFor="images" className="block text-sm font-medium text-gray-700">
-            Product Images (Select Multiple)
+            Add New Images
           </label>
           <input
             type="file"
@@ -189,7 +247,6 @@ export default function ProductUploadForm() {
             accept="image/*"
             onChange={handleImageChange}
             multiple
-            required
           />
         </div>
 
@@ -203,7 +260,7 @@ export default function ProductUploadForm() {
             className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition duration-200 disabled:opacity-50"
             disabled={loading}
           >
-            {loading ? "Uploading..." : "Upload Product"}
+            {loading ? "Updating..." : "Update Product"}
           </button>
         </div>
       </form>

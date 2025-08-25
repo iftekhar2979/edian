@@ -1,5 +1,6 @@
-"use client";
+'use client'
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter
 import {
   MagnifyingGlassIcon,
   UserIcon,
@@ -12,10 +13,29 @@ import { usePathname } from 'next/navigation';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false); // State for toggling search input
+  const [searchQuery, setSearchQuery] = useState(''); // State to track search query
   const pathname = usePathname(); // 👈 get current path
+  const router = useRouter(); // Next.js router to navigate programmatically
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const toggleSearch = () => {
+    setIsSearchOpen(!isSearchOpen);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  // Navigate to the products page with the search query as a URL parameter
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent default form submission
+    if (searchQuery.trim()) {
+      router.push(`/products?search=${searchQuery}`); // Navigate to products with search query
+    }
   };
 
   const isActive = (path: string) => pathname === path;
@@ -51,9 +71,31 @@ const Navbar: React.FC = () => {
 
           {/* Desktop Icons */}
           <div className="hidden md:flex items-center space-x-6">
-            <MagnifyingGlassIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
+            {/* Search Icon */}
+            <MagnifyingGlassIcon 
+              className="h-5 w-5 text-gray-700 cursor-pointer" 
+              onClick={toggleSearch} 
+            />
+
+            {/* Show search input when 'isSearchOpen' is true */}
+            {isSearchOpen && (
+              <form onSubmit={handleSearchSubmit} className="flex items-center">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  placeholder="Search..."
+                  className="p-2 border text-black rounded-md"
+                  autoFocus
+                />
+                <button type="submit" className="ml-2 p-2 bg-blue-600 text-white rounded-md">
+                  Search
+                </button>
+              </form>
+            )}
+
             <Link href={'/login'}>
-<UserIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
+              <UserIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
             </Link>
             <ShoppingBagIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
           </div>
@@ -112,7 +154,7 @@ const Navbar: React.FC = () => {
           <div className="flex items-center space-x-6">
             <MagnifyingGlassIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
             <Link href={'/login'}>
-            <UserIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
+              <UserIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
             </Link>
             <ShoppingBagIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
           </div>
