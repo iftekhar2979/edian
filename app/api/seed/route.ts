@@ -1,15 +1,14 @@
 // /app/api/seed/route.ts
 import usersModel from '@/lib/models/users.model';
 import dbConnect from '@/lib/mongoose';
-import bcrypt from 'bcryptjs';
-
 export async function GET() {
   // console.log("Request received to seed admin user",req);
   try {
     await dbConnect(); // Connect to the database
-
+const adminEmail ='admin@shenjidan.com'
+const adminPassword ='admin123' 
     // Check if the admin already exists
-    const existingAdmin = await usersModel.findOne({ email: 'admin@shenjidan.com' });
+    const existingAdmin = await usersModel.findOne({ email:adminEmail });
     if (existingAdmin) {
       return new Response(
         JSON.stringify({ message: 'Admin user already exists.' }),
@@ -17,14 +16,10 @@ export async function GET() {
       );
     }
 
-    // If the admin doesn't exist, create a new admin user
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash('shenjidan123', salt);
-
     const adminUser = new usersModel({
       name: 'Admin',
-      email: 'admin@shenjidan.com',
-      password: hashedPassword,
+      email: adminEmail,
+      password: adminPassword,
       role: 'admin',
       image: '',
     });

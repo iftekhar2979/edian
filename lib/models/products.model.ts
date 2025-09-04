@@ -1,7 +1,7 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 // Define the Product interface
-export interface IProduct extends Document {
+export interface IProduct  {
   name: string;
   price: number;
   description: string;

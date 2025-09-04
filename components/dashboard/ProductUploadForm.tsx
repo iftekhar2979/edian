@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import Quill from "quill";
+// import Quill from "quill";
 import "quill/dist/quill.snow.css"; // Import Quill styles
 
 export default function ProductUploadForm() {
@@ -18,31 +18,35 @@ export default function ProductUploadForm() {
 
   const editorRef = useRef(null); // Reference to the editor container
 
-  useEffect(() => {
-    if (editorRef.current) {
-      const quill = new Quill(editorRef.current, {
-        theme: "snow",
-        placeholder: "Type your product description...",
-        modules: {
-          toolbar: [
-            [{ header: "1" }, { header: "2" }, { font: [] }],
-            [{ list: "ordered" }, { list: "bullet" }],
-            ["bold", "italic", "underline"],
-            ["link", "image"],
-            [{ align: [] }],
-            ["clean"],
-          ],
-        },
-      });
+ useEffect(() => {
+    // Only run on client
+    import("quill").then((QuillModule) => {
+      const Quill = QuillModule.default;
+      if (editorRef.current) {
+        const quill = new Quill(editorRef.current, {
+          theme: "snow",
+          placeholder: "Type your product description...",
+          modules: {
+            toolbar: [
+              [{ header: "1" }, { header: "2" }, { font: [] }],
+              [{ list: "ordered" }, { list: "bullet" }],
+              ["bold", "italic", "underline"],
+              ["link", "image"],
+              [{ align: [] }],
+              ["clean"],
+            ],
+          },
+        });
 
-      // Sync Quill content with the state
-      quill.on("text-change", function () {
-        setProductData((prevData) => ({
-          ...prevData,
-          description: quill.root.innerHTML, // Save rich HTML content to state
-        }));
-      });
-    }
+        // Sync Quill content with the state
+        quill.on("text-change", function () {
+          setProductData((prevData) => ({
+            ...prevData,
+            description: quill.root.innerHTML,
+          }));
+        });
+      }
+    });
   }, []);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
