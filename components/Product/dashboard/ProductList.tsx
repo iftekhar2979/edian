@@ -13,11 +13,11 @@ type Product = {
 };
 
 const ProductTable = () => {
-  const [productList, setProductList] = useState<Product[]>([]);
+  const [productList, setProductList] = useState<{products:Product[],totalProducts:number,totalPages:number,currentPages}>();
   // Fetch products from the PI
   const fetchProducts = async () => {
     try {
-      const res = await axios.get('/api/products');
+      const res = await axios.get('/api/products?page=1&limit=100');
       setProductList(res.data); // Set the products data to state
     } catch (error) {
       console.error('Failed to fetch products:', error);
@@ -42,7 +42,7 @@ const ProductTable = () => {
       }
     }
   };
-
+console.log("Product list",productList)
   return (
     <div className="p-6 mt-16">
       <h1 className="text-2xl text-black font-bold mb-6">Product List</h1>
@@ -51,23 +51,23 @@ const ProductTable = () => {
       {/* Table */}
       <div className="overflow-x-auto text-black">
         <table className="min-w-full table-auto border-collapse">
-          <thead>
+          <thead className='bg-gray-200 '>
             <tr>
-              <th className="px-4 py-2 border">Name</th>
-              <th className="px-4 py-2 border">Price</th>
-              <th className="px-4 py-2 border">Quantity</th>
-              <th className="px-4 py-2 border">In Stock</th>
-              <th className="px-4 py-2 border">Actions</th>
+              <th className="px-4 py-2 border-l shadow-md">Name</th>
+              <th className="px-4 py-2 border-l shadow-md">Price</th>
+              <th className="px-4 py-2 border-l shadow-md">Quantity</th>
+              <th className="px-4 py-2 border-l shadow-md">In Stock</th>
+              <th className="px-4 py-2 border-l shadow-md">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {productList.map((product) => (
+            {productList?.products.map((product) => (
               <tr key={product._id}>
-                <td className="px-4 py-2 border">{product.name}</td>
-                <td className="px-4 py-2 border">${product.price.toFixed(2)}</td>
-                <td className="px-4 py-2 border">{product.quantity}</td>
-                <td className="px-4 py-2 border">{product.hasStock ? 'In Stock' : 'Out of Stock'}</td>
-                <td className="px-4 py-2 border">
+                <td className="px-4 py-2 border bg-gray-200">{product.name}</td>
+                <td className="px-4 py-2 border bg-gray-200">${product.price.toFixed(2)}</td>
+                <td className="px-4 py-2 border bg-gray-200">{product.quantity}</td>
+                <td className="px-4 py-2 border bg-gray-200">{product.hasStock ? 'In Stock' : 'Out of Stock'}</td>
+                <td className="px-4 py-2 border bg-gray-200">
                   <Link href={`products/${product._id}`}
                     // onClick={() => handleEditClick(product)}
                     className="px-2 py-1 bg-blue-600 text-white rounded"

@@ -13,6 +13,9 @@ export default function Sidebar() {
         <Link href="/dashboard/products" className="block hover:underline">
           Manage Products
         </Link>
+        <Link href="/dashboard/carousels" className="block hover:underline">
+          Manage Carousels
+        </Link>
         <Link href="#" className="block hover:underline">
           Settings
         </Link>
