@@ -27,9 +27,9 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
         {/* Logo and Intro */}
         <div>
-          <h2 className="text-2xl font-serif font-bold mb-4">Shen-Jidan</h2>
+          <h2 className="text-2xl font-serif font-bold mb-4">Shen J-idian Technology</h2>
           <p className="text-sm text-gray-600">
-            Discover modern tech and natural beauty in perfect harmony.
+            A Modern Technology company specializing in the research and development
           </p>
         </div>
 
@@ -63,9 +63,13 @@ const Footer: React.FC = () => {
           <h3 className="font-semibold text-base mb-3">Support</h3>
           <ul className="space-y-2 text-sm">
             <li>
-              <Link href="/faq" className="flex items-center space-x-2 hover:underline">
+              <Link
+              href="/faq"
+              className="flex items-center space-x-2 hover:underline"
+            >
                 <ChatBubbleOvalLeftEllipsisIcon className="w-4 h-4" />
-                <span>FAQs</span>
+              
+              <span>FAQs</span>
               </Link>
             </li>
             <li>
@@ -89,7 +93,7 @@ const Footer: React.FC = () => {
           <ul className="space-y-2 text-sm">
             <li className="flex items-center space-x-2">
               <EnvelopeIcon className="w-4 h-4" />
-              <span>support@shenjidan.com</span>
+              <span>support@shenjidian.com</span>
             </li>
             <li className="flex items-center space-x-2">
               <PhoneIcon className="w-4 h-4" />

@@ -1,15 +1,15 @@
-import productsModel from '@/lib/models/products.model';
+// import productsModel from '@/lib/models/products.model';
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongoose';
 import carouselModel from '@/lib/models/carousel.model';
 import { uploadImageToCloud } from '../products/uploadImageToCloudinary';
 
 
-interface Params {
-  params: { id: string };
-}
+// interface Params {
+//   params: { id: string };
+// }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     dbConnect();
    
@@ -27,20 +27,22 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function DELETE(req: Request, { params }: Params) {
+export async function DELETE( { params }: any) {
   try {
     await dbConnect();
+    
     const deleted = await carouselModel.findByIdAndDelete(params.id);
     if (!deleted) {
       return NextResponse.json({ error: 'Item not found' }, { status: 404 });
     }
     return NextResponse.json({ message: 'Item deleted' }, { status: 200 });
   } catch (err) {
+    console.log(err)
     return NextResponse.json({ error: 'Delete failed' }, { status: 500 });
   }
 }
 
-export async function PUT(req: Request, { params }: Params) {
+export async function PUT(req: Request, { params }: any) {
   try {
     await dbConnect();
     const body = await req.json();
@@ -58,6 +60,7 @@ export async function PUT(req: Request, { params }: Params) {
 
     return NextResponse.json(updated, { status: 200 });
   } catch (err) {
+    console.log(err)
     return NextResponse.json({ error: 'Update failed' }, { status: 500 });
   }
 }
@@ -70,7 +73,7 @@ export async function POST(req: NextRequest) {
     // const quantity = parseInt(formData.get("quantity") as string); // Get quantity
     // const hasStock = formData.get("hasStock") === "true"; // Parse hasStock as boolean
     const subHeading = formData.get("subHeading") as string;
-    const images: string[] = [];
+    // const images: string[] = [];
 
     const imageFiles = formData.get('image') as File;
     // Upload each image to Cloudinary

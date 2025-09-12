@@ -9,26 +9,26 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/parallax";
+import Image from "next/image";
 
 const ImageSlider: React.FC = () => {
   const slides = [
     {
+      image:"/pngtree-e-commerce-tmall-dash-cam-black-high-end-banner-image_909564.jpg",
+      heading: "Dash camera for you .",
+      subheading: "Experience the best in-car surveillance with premium features and reliable service.",
+    },
+    {
       image:
-        "https://edinamag.com/wp-content/uploads/2023/08/EDN10511_0919_Coccinella_CE_5892.jpg",
-      heading: "Botanical Beauty",
-      subheading: "Experience the purity of nature in every drop.",
+        "/top-new-1.png",
+      heading: "Top Performance, New Arrival",
+      subheading: "Stay safe on the road with our latest dash cam technology – built for clarity and peace of mind.",
     },
     {
       image:
         "https://essentialsaltspa.com/wp-content/uploads/2024/11/vecteezy_salvia-officinalis-sage-oil-homemade-sage-infused-oil-in_15992101-1024x683.jpg",
-      heading: "Sage Wellness",
-      subheading: "Rediscover calm and balance with herbal infusions.",
-    },
-    {
-      image:
-        "https://essentialsaltspa.com/wp-content/uploads/2024/11/vecteezy_salvia-officinalis-sage-oil-homemade-sage-infused-oil-in_15992101-1024x683.jpg",
-      heading: "Natural Healing",
-      subheading: "Organic solutions to elevate your body and mind.",
+      heading: "Drive with Confidence",
+      subheading: "Enhance your journey with smart recording and real-time safety – because your drive deserves the best.",
     },
   ];
 
@@ -60,13 +60,13 @@ const ImageSlider: React.FC = () => {
         {slides.map((slide, index) => (
           <SwiperSlide key={index}>
             <div className="relative h-[60vh] w-full">
-              {/* <Image
+              <Image
                 src={slide.image}
                 alt={`slide-${index}`}
-                height={100}
-                width={100}
+                height={1000}
+                width={1000}
                 className="object-cover w-full h-full brightness-75"
-              /> */}
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10" />
               <div
                 className="absolute inset-0 flex flex-col justify-center items-center z-20 text-white text-center px-4"

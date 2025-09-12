@@ -11,9 +11,7 @@ interface Contact {
 
 const contacts: Contact[] = [
   { name: 'Tawhid Talukder', phone: '+86 13032717391', person: 'Tawhid Talukder' },
-  { name: 'Edward', phone: '+86 176 8977 1938', person: 'Edward' },
-  { name: 'Edward', phone: '+86 175 8916 9091', person: 'Edward' },
-  { name: 'Kate', phone: '+86 137 1381 4226', person: 'Kate' },
+  { name: 'Xiao Liu', phone: '+86 18576458803', person: 'Xiao Liu' },
 ];
 
 const cleanPhoneNumber = (phone: string): string => {
@@ -30,43 +28,70 @@ const CompanyInfo: React.FC = () => {
 
         <div className="bg-gray-100 p-4 sm:p-6 md:p-8 rounded-lg shadow-sm">
           <h3 className="text-lg sm:text-xl font-semibold text-center mb-6">
-            Shenzhen Antuxing Technology Co., LTD.
+            Shen J-idian Technology (HK) Co., LTD.
           </h3>
 
           {/* Contact List */}
-          <ul className="space-y-6">
-            {contacts.map((contact, index) => {
-              const phoneClean = cleanPhoneNumber(contact.phone);
-              return (
-                <li
-                  key={index}
-                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 border-b pb-4"
-                >
-                  <div className="flex items-center gap-2">
-                    <FaPhoneAlt className="text-blue-500" />
-                    <a
-                      href={`tel:${phoneClean}`}
-                      className="text-base sm:text-lg text-blue-600 hover:underline"
-                    >
-                      {contact.phone}
-                    </a>
-                    <span className="text-gray-700 text-sm sm:text-base">
-                      ({contact.person})
-                    </span>
-                  </div>
+         <ul className="space-y-6">
+  {contacts.map((contact, index) => {
+    const phoneClean = cleanPhoneNumber(contact.phone);
 
-                  <a
-                    href={`https://wa.me/${phoneClean}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-green-600 hover:underline mt-2 sm:mt-0"
-                  >
-                    <FaWhatsapp className="text-lg" /> WhatsApp / WeChat
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
+    return (
+      <li
+        key={index}
+        className="flex flex-col gap-3 border-b pb-4 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+          <div className="flex items-center gap-2">
+            <FaPhoneAlt className="text-blue-500" />
+            <span className="text-base sm:text-lg text-blue-900">
+              {contact.phone}
+            </span>
+            <span className="text-gray-700 text-sm sm:text-base">
+              ({contact.person})
+            </span>
+          </div>
+        </div>
+
+        <div className="flex gap-3 flex-wrap">
+          {/* Phone Call Button */}
+          <a
+            href={`tel:${phoneClean}`}
+            className="px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm flex items-center gap-1"
+          >
+            <FaPhoneAlt /> Call
+          </a>
+
+          {/* WhatsApp Button */}
+          <a
+            href={`https://wa.me/${phoneClean}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-4 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm flex items-center gap-1"
+          >
+            <FaWhatsapp /> WhatsApp
+          </a>
+
+          {/* WeChat Button */}
+          <a
+            href={`/wechat-info?user=${encodeURIComponent(contact.person)}`}
+            className="px-4 py-1 bg-gray-800 text-white rounded hover:bg-gray-900 text-sm flex items-center gap-1"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              {/* Simple WeChat Icon */}
+              <path d="M18.944 10.112C17.968 8.176 15.648 7 13 7c-3.312 0-6 2.238-6 5s2.688 5 6 5c.688 0 1.352-.096 1.96-.28.456.352 1.008.608 1.624.728.176.032.336-.112.336-.296v-1.28c1.12-.84 1.816-2.08 1.816-3.44 0-.776-.216-1.512-.592-2.12zm-7.44 1.92c-.44 0-.8-.36-.8-.8s.36-.8.8-.8.8.36.8.8-.36.8-.8.8zm3 0c-.44 0-.8-.36-.8-.8s.36-.8.8-.8.8.36.8.8-.36.8-.8.8z" />
+            </svg>
+            WeChat
+          </a>
+        </div>
+      </li>
+    );
+  })}
+</ul>
 
           {/* Address & Map */}
           <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">

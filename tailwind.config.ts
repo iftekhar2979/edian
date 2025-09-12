@@ -3,6 +3,7 @@ module.exports = {
   content: [
     './src/**/*.{html,js,jsx,ts,tsx}', // Make sure to include all file types used in your project
   ],
+
   theme: {
     extend: {
       fontFamily: {

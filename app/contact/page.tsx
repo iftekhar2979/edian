@@ -1,4 +1,4 @@
-import AboutUs from '@/components/about/Aboutus'
+// import AboutUs from '@/components/about/Aboutus'
 import CompanyInfo from '@/components/company/CompanyInfo'
 import ContactForm from '@/components/contact/ContactUs'
 import React from 'react'

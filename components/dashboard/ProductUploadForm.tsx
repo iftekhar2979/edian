@@ -16,38 +16,39 @@ export default function ProductUploadForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const editorRef = useRef(null); // Reference to the editor container
+    const editorRef = useRef(null); // Reference to the editor container
 
- useEffect(() => {
-    // Only run on client
-    import("quill").then((QuillModule) => {
-      const Quill = QuillModule.default;
-      if (editorRef.current) {
-        const quill = new Quill(editorRef.current, {
-          theme: "snow",
-          placeholder: "Type your product description...",
-          modules: {
-            toolbar: [
-              [{ header: "1" }, { header: "2" }, { font: [] }],
-              [{ list: "ordered" }, { list: "bullet" }],
-              ["bold", "italic", "underline"],
-              ["link", "image"],
-              [{ align: [] }],
-              ["clean"],
-            ],
-          },
-        });
-
-        // Sync Quill content with the state
-        quill.on("text-change", function () {
-          setProductData((prevData) => ({
-            ...prevData,
-            description: quill.root.innerHTML,
-          }));
-        });
-      }
-    });
-  }, []);
+  useEffect(() => {
+      // Only run on client
+      import("quill").then((QuillModule) => {
+        const Quill = QuillModule.default;
+        if (editorRef.current) {
+          const quill = new Quill(editorRef.current, {
+            theme: "snow",
+            placeholder: "Type your product description...",
+            
+            modules: {
+              toolbar: [
+                [{ header: "1" }, { header: "2" }, { font: [] }],
+                [{ list: "ordered" }, { list: "bullet" }],
+                ["bold", "italic", "underline"],
+                ["link", "image"],
+                [{ align: [] }],
+                ["clean"],
+              ],
+            },
+          });
+  quill.root.innerHTML = productData.description || "<p>Start typing your product description here...</p>";
+          // Sync Quill content with the state
+          quill.on("text-change", function () {
+            setProductData((prevData) => ({
+              ...prevData,
+              description: quill.root.innerHTML,
+            }));
+          });
+        }
+      });
+    }, [productData.description]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;

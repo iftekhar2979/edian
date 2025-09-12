@@ -13,7 +13,7 @@ const AboutUs: React.FC = () => {
 
       <div className="mb-6">
         <h2 className="text-2xl font-semibold mb-2">Our Vision </h2>
-       <p>After nearly 5 years of development, the company's products serve major 4S service providers and trading companies. With the rapid development of cross-border e-commerce, in recent years, the products have been exported to multiple countries and regions at home and abroad, such as the United States, Saudi Arabia, Turkey, South Korea, Japan, Thailand, Russia, Taiwan, etc.. They are deeply welcomed and trusted by consumers. We are providing OEM services to multiple well-known brands both domestically and internationally.</p>
+       <p>After nearly 5 years of development, the company&aposs products serve major 4S service providers and trading companies. With the rapid development of cross-border e-commerce, in recent years, the products have been exported to multiple countries and regions at home and abroad, such as the United States, Saudi Arabia, Turkey, South Korea, Japan, Thailand, Russia, Taiwan, etc.. They are deeply welcomed and trusted by consumers. We are providing OEM services to multiple well-known brands both domestically and internationally.</p>
         {/* <ul className="list-disc list-inside space-y-1">
           <li><strong>Next.js</strong> for lightning-fast, SEO-friendly React applications.</li>
           <li><strong>TypeScript</strong> for safer, more maintainable code with strong typing.</li>

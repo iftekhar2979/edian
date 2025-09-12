@@ -8,7 +8,7 @@ interface Props {
 }
 
 const ProductCard: React.FC<Props> = ({ product }) => {
-  console.log(product)
+  // console.log(product)
   return (
     <div className="relative bg-white overflow-hidden group cursor-pointer border border-gray-200 h-full flex flex-col justify-between">
       {/* Sale Tag */}
@@ -21,8 +21,8 @@ const ProductCard: React.FC<Props> = ({ product }) => {
       {/* Product Image */}
       <Image
         src={product.images[0] || '/placeholder.png'}
-        height={100}
-        width={100}
+        height={1000}
+        width={1000}
         quality={100}
         alt={product.name}
         className="w-full transform transition-all duration-300 h-64 object-cover hover:scale-110 hover:border-pink-400"

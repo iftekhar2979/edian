@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 
 interface CarouselCardProps {
@@ -21,9 +22,11 @@ const CarouselCard: React.FC<CarouselCardProps> = ({
 }) => {
   return (
     <div className="border rounded-lg p-4 shadow-md bg-white">
-      <img
+      <Image
         src={imageUrl}
         alt={heading}
+        height={1000}
+        width={1000}
         className="w-full h-48 object-cover rounded-md mb-4"
       />
       <h3 className="text-lg font-bold">{heading}</h3>

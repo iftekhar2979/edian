@@ -45,7 +45,7 @@ const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 sm:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="text-2xl font-serif text-gray-800 tracking-widest">Shen-Jidan</div>
+          <div className="text-2xl font-serif text-gray-800 tracking-widest">Shen J-idian Technology</div>
 
           {/* Desktop Nav Links */}
           <div className="hidden md:flex space-x-8 text-sm font-medium text-gray-700">

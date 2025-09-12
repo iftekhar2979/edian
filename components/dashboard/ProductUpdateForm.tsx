@@ -1,13 +1,13 @@
+"use client";
 
-"use client"
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import Quill from "quill";
-import "quill/dist/quill.snow.css"; // Import Quill styles
+import "react-quill/dist/quill.snow.css";
 import Image from "next/image";
 
-export default function ProductUpdateForm({id}) {
+
+export default function ProductUpdateForm({ id }: { id: string }) {
   const [productData, setProductData] = useState({
     name: "",
     price: 0,
@@ -15,36 +15,27 @@ export default function ProductUpdateForm({id}) {
     hasStock: true,
     description: "",
     images: [] as File[],
-    existingImages: [] as string[], // To store the existing image URLs
+    existingImages: [] as string[],
   });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-const router = useRouter()
-  const editorRef = useRef(null); // Reference to the editor container
-// Product ID from URL
+  // const [editorLoaded, setEditorLoaded] = useState(false);
 
+  const router = useRouter();
+
+  // Fetch product data on mount
   useEffect(() => {
     if (id) {
-      fetchProductDetails(id as string); // Fetch product details on mount
+      fetchProductDetails(id);
     }
   }, [id]);
+const editorRef = useRef(null); // Reference to the editor container
 
-  // Fetch product details by ID
-  const fetchProductDetails = async (productId: string) => {
-    try {
-      const res = await axios.get(`/api/products/${productId}`);
-      const product = res.data;
-      setProductData({
-        name: product.name,
-        price: product.price,
-        quantity: product.quantity,
-        hasStock: product.hasStock,
-        description: product.description,
-        images: [],
-        existingImages: product.images,
-      });
-
-      // Initialize Quill editor with the existing description
+ useEffect(() => {
+    // Only run on client
+    import("quill").then((QuillModule) => {
+      const Quill = QuillModule.default;
       if (editorRef.current) {
         const quill = new Quill(editorRef.current, {
           theme: "snow",
@@ -60,70 +51,79 @@ const router = useRouter()
             ],
           },
         });
-        quill.root.innerHTML = product.description; // Set the existing description in the editor
+
+        // Sync Quill content with the state
         quill.on("text-change", function () {
           setProductData((prevData) => ({
             ...prevData,
-            description: quill.root.innerHTML, // Save rich HTML content to state
+            description: quill.root.innerHTML,
           }));
         });
       }
+    });
+  }, []);
+  // Set description and mark editor as ready
+  const fetchProductDetails = async (productId: string) => {
+    try {
+      const res = await axios.get(`/api/products/${productId}`);
+      const product = res.data;
+      setProductData({
+        name: product.name,
+        price: product.price,
+        quantity: product.quantity,
+        hasStock: product.hasStock,
+        description: product.description,
+        images: [],
+        existingImages: product.images,
+      });
+
+      // setEditorLoaded(true); // Load editor *after* data is set
     } catch (error) {
       console.error("Failed to fetch product:", error);
     }
   };
 
-  // Handle image change (add new images)
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
-      setProductData({
-        ...productData,
-        images: Array.from(files), // Add new images to the array
-      });
+      setProductData((prev) => ({
+        ...prev,
+        images: Array.from(files),
+      }));
     }
   };
 
-  // Handle image removal
   const handleImageRemove = (index: number) => {
-    setProductData({
-      ...productData,
-      existingImages: productData.existingImages.filter((_, i) => i !== index), // Remove selected image
-    });
+    setProductData((prev) => ({
+      ...prev,
+      existingImages: prev.existingImages.filter((_, i) => i !== index),
+    }));
   };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     const formData = new FormData();
-    formData.append("id",id)
+    formData.append("id", id);
     formData.append("name", productData.name);
     formData.append("price", productData.price.toString());
     formData.append("quantity", productData.quantity.toString());
     formData.append("hasStock", productData.hasStock.toString());
     formData.append("description", productData.description);
 
-    // Add existing images (URLs) to the form data
-    productData.existingImages.forEach((image) => {
-      formData.append("existingImages", image);
-    });
-
-    // Add new images to the form data
-    productData.images.forEach((image) => {
-      formData.append("images", image);
-    });
+    productData.existingImages.forEach((img) => formData.append("existingImages", img));
+    productData.images.forEach((img) => formData.append("images", img));
 
     try {
       const res = await axios.put(`/api/products/${id}`, formData);
       if (res.status === 200) {
         alert("Product updated successfully!");
-         router.push("/products"); // Redirect to the products page after success
+        router.push("/products");
       }
     } catch (error: any) {
-      setError(error.message);
+      setError(error.message || "An error occurred.");
     } finally {
       setLoading(false);
     }
@@ -132,6 +132,7 @@ const router = useRouter()
   return (
     <div className="mt-10 bg-white p-8 rounded-lg shadow-md text-black">
       <h1 className="text-3xl font-bold text-center mb-6">Edit Product</h1>
+
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Product Name */}
         <div>
@@ -141,7 +142,7 @@ const router = useRouter()
           <input
             type="text"
             id="name"
-            className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="mt-1 block w-full p-3 border border-gray-300 rounded-md"
             value={productData.name}
             onChange={(e) => setProductData({ ...productData, name: e.target.value })}
             required
@@ -156,11 +157,9 @@ const router = useRouter()
           <input
             type="number"
             id="price"
-            className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="mt-1 block w-full p-3 border border-gray-300 rounded-md"
             value={productData.price}
-            onChange={(e) =>
-              setProductData({ ...productData, price: parseFloat(e.target.value) })
-            }
+            onChange={(e) => setProductData({ ...productData, price: parseFloat(e.target.value) })}
             required
             min={0}
           />
@@ -174,7 +173,7 @@ const router = useRouter()
           <input
             type="number"
             id="quantity"
-            className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="mt-1 block w-full p-3 border border-gray-300 rounded-md"
             value={productData.quantity}
             onChange={(e) => setProductData({ ...productData, quantity: parseInt(e.target.value) })}
             required
@@ -182,15 +181,13 @@ const router = useRouter()
           />
         </div>
 
-        {/* Stock Availability */}
+        {/* Has Stock */}
         <div className="flex items-center">
           <input
             type="checkbox"
             id="hasStock"
             checked={productData.hasStock}
-            onChange={(e) =>
-              setProductData({ ...productData, hasStock: e.target.checked })
-            }
+            onChange={(e) => setProductData({ ...productData, hasStock: e.target.checked })}
             className="h-4 w-4 text-blue-600"
           />
           <label htmlFor="hasStock" className="ml-2 text-sm font-medium text-gray-700">
@@ -198,35 +195,35 @@ const router = useRouter()
           </label>
         </div>
 
-        {/* Description (Quill Editor) */}
+        {/* Description */}
         <div>
-          <label htmlFor="description" className="block text-sm font-medium">
+          <label htmlFor="description" className="block text-sm font-medium mb-2">
             Product Description
           </label>
-          <div
+           <div
             ref={editorRef}
             className="quill-editor-container"
             style={{
-              height: "500px", // Make the height larger
-              width: "100%",   // Ensure it spans the full width
-              border: "1px solid #ccc", // Border for the editor container
+              height: "500px",
+              width: "100%",
+              border: "1px solid #ccc",
             }}
           ></div>
         </div>
 
-        {/* Existing Product Images */}
+        {/* Existing Images */}
         <div>
-          <label htmlFor="existingImages" className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
             Existing Product Images
           </label>
-          <div className="flex space-x-2">
+          <div className="flex flex-wrap gap-2">
             {productData.existingImages.map((image, index) => (
-              <div key={index} className="relative">
-                <Image src={image} alt={`Product Image ${index}`} className="w-20 h-20 object-cover" />
+              <div key={index} className="relative w-20 h-20">
+                <Image src={image} alt={`Product ${index}`} fill className="object-cover rounded" />
                 <button
                   type="button"
                   onClick={() => handleImageRemove(index)}
-                  className="absolute top-0 right-0 bg-red-600 text-white p-1 rounded-full"
+                  className="absolute top-0 right-0 bg-red-600 text-white rounded-full text-xs px-1"
                 >
                   X
                 </button>
@@ -235,7 +232,7 @@ const router = useRouter()
           </div>
         </div>
 
-        {/* Image Upload */}
+        {/* Upload New Images */}
         <div>
           <label htmlFor="images" className="block text-sm font-medium text-gray-700">
             Add New Images
@@ -243,22 +240,22 @@ const router = useRouter()
           <input
             type="file"
             id="images"
-            className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             accept="image/*"
-            onChange={handleImageChange}
             multiple
+            onChange={handleImageChange}
+            className="mt-1 block w-full p-3 border border-gray-300 rounded-md"
           />
         </div>
 
-        {/* Error Message */}
-        {error && <p className="text-red-500 text-center text-sm">{error}</p>}
+        {/* Error */}
+        {error && <p className="text-red-500 text-center">{error}</p>}
 
-        {/* Submit Button */}
-        <div className="flex justify-center">
+        {/* Submit */}
+        <div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition duration-200 disabled:opacity-50"
             disabled={loading}
+            className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition disabled:opacity-50"
           >
             {loading ? "Updating..." : "Update Product"}
           </button>

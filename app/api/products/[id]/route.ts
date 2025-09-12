@@ -7,9 +7,9 @@ import { uploadImageToCloud } from '../uploadImageToCloudinary';
 export async function GET(req: NextRequest, { params }: any) {
   try {
     await dbConnect(); // Ensure the database connection is established
-
+    // console.log(params)
     // Directly destructure the id from params
-    const { id } = params;
+    const { id } = await params;
 
     if (!id) {
       return NextResponse.json({ error: "Product ID is missing" }, { status: 400 });
