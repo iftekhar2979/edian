@@ -23,7 +23,7 @@ const seedAdminUser = async () => {
     role: 'admin',
     image: '',  // You can add a default image URL or leave it blank
   });
-console.log(adminUser)
+// console.log(adminUser)
   await adminUser.save();
   console.log('Admin user seeded successfully.');
 };

@@ -67,6 +67,12 @@ const Navbar: React.FC = () => {
             >
               Contact
             </Link>
+            <Link
+              href="/about"
+              className={isActive('/about') ? 'underline underline-offset-4' : 'hover:underline'}
+            >
+              About Us
+            </Link>
           </div>
 
           {/* Desktop Icons */}
@@ -76,7 +82,6 @@ const Navbar: React.FC = () => {
               className="h-5 w-5 text-gray-700 cursor-pointer" 
               onClick={toggleSearch} 
             />
-
             {/* Show search input when 'isSearchOpen' is true */}
             {isSearchOpen && (
               <form onSubmit={handleSearchSubmit} className="flex items-center">

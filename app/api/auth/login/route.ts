@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dbConnect from '@/lib/mongoose'; // Adjust path as needed
 import usersModel from '@/lib/models/users.model'; // Adjust path as needed
-
+ 
 
   interface Payload {
       email:string;

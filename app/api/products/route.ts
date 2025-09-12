@@ -26,7 +26,6 @@ import { uploadImageToCloud } from './uploadImageToCloudinary';
 export async function GET(req: NextRequest) {
   try {
     dbConnect();
-    
     // Get query parameters
     const { search, page = 1, limit = 10, hasStock, priceMin, priceMax } = req.nextUrl.searchParams as any;
 

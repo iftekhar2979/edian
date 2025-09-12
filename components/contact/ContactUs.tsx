@@ -22,7 +22,7 @@ const ContactForm: React.FC = () => {
 
   return (
     <div className=" p-6 w-full max-w-2xl mx-auto mt-20 text-black bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold mb-4  text-black tracking-widest">Contact Us</h2>
+      <h2 className="text-2xl font-semibold mb-4  text-black tracking-widest">Email Us</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-black font-medium mb-1" htmlFor="name">

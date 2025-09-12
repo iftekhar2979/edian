@@ -1,3 +1,4 @@
+import Advantages from "@/components/advantages/advantages";
 import CompanyInfo from "@/components/company/CompanyInfo";
 import ContactForm from "@/components/contact/ContactUs";
 import Banner from "@/components/home/Banner";
@@ -10,8 +11,9 @@ export default function Home() {
    <Banner/>
 <ProductsText/>
    <ProductGrid search={""} page={"1"} limit={"10"}/>
-   <ContactForm/>
+     <Advantages />
    <CompanyInfo/>
+   <ContactForm/>
    </section>
   );
 }
