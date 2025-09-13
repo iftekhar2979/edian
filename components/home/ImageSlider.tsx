@@ -14,19 +14,19 @@ import Image from "next/image";
 const ImageSlider: React.FC = () => {
   const slides = [
     {
-      image:"/pngtree-e-commerce-tmall-dash-cam-black-high-end-banner-image_909564.jpg",
+      image:"/13935.jpg",
       heading: "Dash camera for you .",
       subheading: "Experience the best in-car surveillance with premium features and reliable service.",
     },
     {
       image:
-        "/top-new-1.png",
+        "/2304.w026.n002.3473B.p1.3473.jpg",
       heading: "Top Performance, New Arrival",
       subheading: "Stay safe on the road with our latest dash cam technology – built for clarity and peace of mind.",
     },
     {
       image:
-        "https://essentialsaltspa.com/wp-content/uploads/2024/11/vecteezy_salvia-officinalis-sage-oil-homemade-sage-infused-oil-in_15992101-1024x683.jpg",
+        "/woman-driver-hands-steering-wheel-inside-car.jpg",
       heading: "Drive with Confidence",
       subheading: "Enhance your journey with smart recording and real-time safety – because your drive deserves the best.",
     },

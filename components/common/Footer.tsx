@@ -93,11 +93,11 @@ const Footer: React.FC = () => {
           <ul className="space-y-2 text-sm">
             <li className="flex items-center space-x-2">
               <EnvelopeIcon className="w-4 h-4" />
-              <span>support@shenjidian.com</span>
+              <span>eshan@j-idian.com</span>
             </li>
             <li className="flex items-center space-x-2">
               <PhoneIcon className="w-4 h-4" />
-              <span>+1 (800) 123-4567</span>
+              <span>+186 18576458803</span>
             </li>
           </ul>
         </div>
@@ -105,7 +105,7 @@ const Footer: React.FC = () => {
 
       {/* Bottom Bar */}
       <div className="bg-gray-200 text-center py-4 text-xs text-gray-500">
-        © {new Date().getFullYear()} Shen-Jidan. All rights reserved.
+        © {new Date().getFullYear()} Shen J-idian Technology All rights reserved.
       </div>
     </footer>
   )
