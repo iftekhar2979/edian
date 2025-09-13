@@ -38,25 +38,25 @@ import { verifyToken } from './app/api/auth/verifyToken';
 
 export async function  middleware (request: NextRequest) {
   // Your logic here
-  console.log('Middleware triggered for:', request.url);
+  // console.log('Middleware triggered for:', request.url);
   const token = request.cookies.get('token') as string | undefined;
-  console.log('Token from cookies:', token);
+  // console.log('Token from cookies:', token);
 
   // If there's no token, redirect the user to the login page
   if (!token) {
-    console.log('No token, redirecting to login...');
+    // console.log('No token, redirecting to login...');
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  console.log('Middleware triggered');
+  // console.log('Middleware triggered');
     try {
     // Verify the JWT token
   const value =  await verifyToken(token);
- console.log('Token is valid, proceeding...',value);
+//  console.log('Token is valid, proceeding...',value);
     // If the token is valid, allow the request to continue
     return NextResponse.next();
   } catch (error) {
-    console.log(error)
+    // console.log(error)
       console.log('Invalid token, redirecting to login...');
     // If the token is invalid, redirect to the login page
     return NextResponse.redirect(new URL('/login', request.url));

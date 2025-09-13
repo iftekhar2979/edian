@@ -28,14 +28,14 @@ export async function POST(req: NextRequest) {
 
     // Find user by email
     const user = await usersModel.findOne({ email });
-    console.log(user)
+    // console.log(user)
     if (!user) {
       return new NextResponse(JSON.stringify({ error: 'user not found!' }), { status: 400 });
     }
 
     // Validate password (bcrypt.compare is async, so we need to await it)
     const isValid = await bcrypt.compare(password, user.password); // Await bcrypt.compare
-    console.log(isValid)
+    // console.log(isValid)
     if (!isValid) {
       return new NextResponse(JSON.stringify({ error: 'Invalid credentials' }), { status: 400 });
     }
