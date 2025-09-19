@@ -20,14 +20,19 @@ import {
   XMarkIcon,
   ChatBubbleOvalLeftEllipsisIcon,
 } from '@heroicons/react/24/outline'
+import Image from 'next/image'
 
 const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-100 text-gray-700 border-t mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
         {/* Logo and Intro */}
-        <div>
-          <h2 className="text-2xl font-serif font-bold mb-4">Shen J-idian Technology</h2>
+        <div className=''>
+            <div className='flex items-center space-x-2'>
+         <Link href='/'><Image src="/logo.jpeg" alt="Logo" width={60} height={60} className="object-contain"/></Link>
+                  <Link href='/'> <h3 className="text-xl font-serif text-gray-800 tracking-widest">Shen J-idian Technology</h3></Link>
+         
+                   </div>
           <p className="text-sm text-gray-600">
             A Modern Technology company specializing in the research and development
           </p>
@@ -96,8 +101,15 @@ const Footer: React.FC = () => {
               <span>eshan@j-idian.com</span>
             </li>
             <li className="flex items-center space-x-2">
-              <PhoneIcon className="w-4 h-4" />
-              <span>+186 18576458803</span>
+            
+                  <a
+                          href={`tel:${+8618681589043}`}
+                          className="px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm flex items-center gap-1"
+                        >
+                           <PhoneIcon className="w-4 h-4" />
+                        </a>
+              <span>+86 186 81589043</span>
+
             </li>
           </ul>
         </div>

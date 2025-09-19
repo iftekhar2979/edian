@@ -34,7 +34,7 @@ const ProductCard: React.FC<Props> = ({ product }) => {
           <h2 className="text-md text-black font-semibold mb-1">{product.name}</h2>
           
             <span className="text-lg font-bold text-black">
-              Tk {product.price}
+              $ {product.price}
             </span>
             
           </div>

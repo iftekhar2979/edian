@@ -18,6 +18,7 @@ const ProductTable = () => {
   const fetchProducts = async () => {
     try {
       const res = await axios.get('/api/products?page=1&limit=100');
+      console.log("Product List",res.data);
       setProductList(res.data); // Set the products data to state
     } catch (error) {
       console.error('Failed to fetch products:', error);
@@ -42,7 +43,7 @@ const ProductTable = () => {
       }
     }
   };
-console.log("Product list",productList)
+// console.log("Product list",productList)
   return (
     <div className="p-6 mt-16">
       <h1 className="text-2xl text-black font-bold mb-6">Product List</h1>

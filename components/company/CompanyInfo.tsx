@@ -12,6 +12,7 @@ interface Contact {
 const contacts: Contact[] = [
   { name: 'Tawhid Talukder', phone: '+86 13032717391', person: 'Tawhid Talukder' },
   { name: 'Xiao Liu', phone: '+86 18576458803', person: 'Xiao Liu' },
+  { name: 'Eshan', phone: '+86 186 81589043', person: 'Eshan' },
 ];
 
 const cleanPhoneNumber = (phone: string): string => {

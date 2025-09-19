@@ -10,6 +10,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -45,8 +46,12 @@ const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 sm:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="text-2xl font-serif text-gray-800 tracking-widest">Shen J-idian Technology</div>
+          <div className='flex items-center space-x-2'>
+<Link href={'/'}><Image src="/logo.jpeg" alt="Logo" width={60} height={60} className="object-contain"/></Link>
+          <Link href={'/'}><div className="text-2xl font-serif text-gray-800 tracking-widest">Shen J-idian Technology</div></Link>
 
+          </div>
+          
           {/* Desktop Nav Links */}
           <div className="hidden md:flex space-x-8 text-sm font-medium text-gray-700">
             <Link

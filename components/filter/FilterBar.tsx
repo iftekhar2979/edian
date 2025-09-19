@@ -117,7 +117,7 @@ const FilterSortBar = () => {
               <div className="absolute left-0 mt-2 w-72 bg-white shadow-md rounded-md border z-20 p-4 text-xs">
                 <div className="flex justify-between items-center mb-3">
                   <span className="text-gray-700">
-                    The highest price is <strong>Tk 3,300.00</strong>
+                    The highest price is <strong>$ 3,300.00</strong>
                   </span>
                   <button
                     onClick={resetPrice}
