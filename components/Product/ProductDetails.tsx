@@ -65,7 +65,7 @@ const ProductDetails: React.FC<{ product }> = ({ product }) => {
           >
             <MinusIcon className="h-5 w-5 text-black" />
           </button> */}
-          <span className="text-pink-600 font-bold">Quantity In Stock : {quantity}</span>
+          {/* <span className="text-pink-600 font-bold">Quantity In Stock : {quantity}</span> */}
           {/* <button
             onClick={handleIncrement}
             className="p-1 border rounded disabled:opacity-40"

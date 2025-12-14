@@ -1,7 +1,10 @@
 // components/productCard.tsx
+'use client'
 import { IProduct } from "@/lib/models/products.model";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
+import { FaWhatsapp } from "react-icons/fa";
 
 interface Props {
   product: IProduct;
@@ -33,24 +36,32 @@ const ProductCard: React.FC<Props> = ({ product }) => {
         <div>
           <h2 className="text-md text-black font-semibold mb-1">{product.name}</h2>
           
-            <span className="text-lg font-bold text-black">
+            {/* <span className="text-lg font-bold text-black">
               $ {product.price}
-            </span>
+            </span> */}
             
           </div>
-          <span className="text-lg font-bold text-pink-600">
-              Quantity In Stock {product.quantity}
+          <span className="text-sm font-bold text-pink-600">
+              Custom Orders applicable
             </span>
         </div>
 
         {/* Action Buttons */}
         <div className="mt-auto flex space-x-2 my-2 mx-2">
-          <button className="relative flex-1 text-black text-sm py-2 rounded border border-pink-600 overflow-hidden z-10 transition-all duration-500 hover:text-black hover:shadow-pink-glow neon-btn">
-  Add to Cart
-</button>
-          <button className="flex-1 bg-green-500 cursor-pointer text-white text-sm py-2 rounded hover:bg-black transition-colors">
-            Buy Now
-          </button>
+         <Link href="/contact" className="relative flex-1 text-black text-sm py-2 rounded border border-pink-600 overflow-hidden z-10 transition-all duration-500 text-center hover:text-black hover:shadow-pink-glow neon-btn">Contact</Link> 
+          
+           <a
+                      href={`https://wa.me/8613032717391`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                       onClick={(e) => e.stopPropagation()}
+                      className="px-4 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm flex items-center gap-1 flex-1 bg-green-500 cursor-pointer text-white text-sm py-2 rounded hover:bg-black transition-colors"
+                    >
+                      <FaWhatsapp /> Order
+                    </a>
+          {/* <button className="flex-1 bg-green-500 cursor-pointer text-white text-sm py-2 rounded hover:bg-black transition-colors">
+            Order
+          </button> */}
         </div>
       </div>
     
