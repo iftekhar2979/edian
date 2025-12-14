@@ -59,7 +59,7 @@ const ProductGrid = async ({ search, page, limit }: ProductGridProps) => {
           <h1 className="text-2xl font-semibold text-gray-800">No products available</h1>
           {search && (
             <p className="text-gray-600 mt-2">
-              No results found for "{search}". Try a different search term.
+              No results found for {search}. Try a different search term.
             </p>
           )}
         </div>

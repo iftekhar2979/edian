@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 
 const ProductDetails: React.FC<{ product }> = ({ product }) => {
-  const { images, name, price, description ,quantity} = product;
+  const { images, name, price, description } = product;
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const handleImageClick = (index: number) => {
     setSelectedImageIndex(index); // Set the selected image when the user clicks on a thumbnail
